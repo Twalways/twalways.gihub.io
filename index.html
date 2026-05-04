@@ -3,98 +3,107 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>イラストギャラリー</title>
+<title>Twilight Pixel Gallery</title>
 <style>
-    /* ページ全体の設定 */
+    /* 全体のレイアウト */
     body, html {
         margin: 0;
         padding: 0;
         width: 100%;
         height: 100%;
-        overflow: hidden; /* スクロールバーを隠す */
-        font-family: 'Helvetica Neue', Arial, sans-serif;
-        background-color: #ff9a9e; /* 画像読み込み前の夕暮れベース色 */
+        overflow: hidden;
+        background-color: #2c1624; /* 万が一の背景色 */
+        font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
     }
 
-    /* 横スクロールする背景（草原と夕暮れのイメージ） */
+    /* 1. 動く背景層（切れ目対策版） */
     .scrolling-bg {
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
         background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop');
-        background-size: cover; /* 画面いっぱいに広げる */
-        background-position: center; /* 中央に合わせる */
-        background-repeat: no-repeat; /* 繰り返さない */
-        /* animation: scrollBackground 120s linear infinite; */ /* アニメーションは一旦止める */
+        background-size: cover;
+        background-position: center;
+        /* 横に2倍のサイズでリピートさせ、端を馴染ませる */
+        background-repeat: repeat-x;
+        animation: scrollBackground 160s linear infinite;
         z-index: 1;
+        /* 少し画像を粗くしてドット感を出す */
+        image-rendering: pixelated;
     }
 
-    /* 背景を動かすキーフレーム */
     @keyframes scrollBackground {
-        0% { background-position: 0 center; }
-        100% { background-position: -2000px center; }
+        from { background-position: 0 center; }
+        to { background-position: -4000px center; }
     }
 
-    /* すりガラス（フロストガラス）のオーバーレイ */
-    .glass-overlay {
+    /* 2. ドット質感層（ピクセルフィルター） */
+    .pixel-layer {
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
         z-index: 2;
-        /* ぼかし効果（ここを大きくするとより曇ります） */
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
-        /* 夕暮れ感を強調するための、ほんのりオレンジの半透明レイヤー */
-        background: rgba(255, 120, 50, 0.15);
+        /* 3x3ピクセルの格子状ドット */
+        background-image: radial-gradient(rgba(0,0,0,0.3) 1px, transparent 0);
+        background-size: 3px 3px;
+        pointer-events: none; /* 下のボタンをクリックできるようにする */
     }
 
-    /* 真ん中のコンテンツ配置用 */
-    .content {
+    /* 3. すりガラス層 */
+    .glass-overlay {
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
         z-index: 3;
+        /* ぼかしを少し強めに（20px） */
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        /* 夕暮れ時のオレンジ〜紫のグラデーション */
+        background: linear-gradient(
+            135deg, 
+            rgba(255, 120, 50, 0.2), 
+            rgba(80, 20, 100, 0.3)
+        );
+    }
+
+    /* 4. コンテンツ層（ボタン） */
+    .container {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        z-index: 4;
         display: flex;
-        flex-direction: column;
         justify-content: center;
         align-items: center;
     }
 
-    /* メインのボタンのデザイン */
     .gallery-btn {
-        padding: 16px 48px;
-        font-size: 1.2rem;
-        color: #ffffff;
+        padding: 20px 50px;
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.9);
         text-decoration: none;
-        font-weight: bold;
-        letter-spacing: 2px;
-        /* ボタン自体にも少しすりガラス感を入れる */
-        background: rgba(255, 255, 255, 0.2);
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        border-radius: 50px;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 4px; /* あえて少しカクつかせてドット感を演出 */
+        background: rgba(255, 255, 255, 0.1);
         backdrop-filter: blur(5px);
         -webkit-backdrop-filter: blur(5px);
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
+        transition: all 0.4s ease;
     }
 
-    /* ボタンにカーソルを合わせた時のフワッとした動き */
     .gallery-btn:hover {
-        background: rgba(255, 255, 255, 0.5);
-        transform: translateY(-3px);
-        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4);
+        background: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.8);
+        letter-spacing: 6px;
+        transform: scale(1.05);
     }
 </style>
 </head>
 <body>
 
-    <!-- 背景 -->
     <div class="scrolling-bg"></div>
-
-    <!-- すりガラス効果 -->
+    <div class="pixel-layer"></div>
     <div class="glass-overlay"></div>
 
-    <!-- ボタン -->
-    <div class="content">
-        <!-- 飛び先のファイル名を href の中に入れます -->
-        <a href="gallery.html" class="gallery-btn">イラストを見る</a>
+    <div class="container">
+        <a href="gallery.html" class="gallery-btn">Enter Gallery</a>
     </div>
 
 </body>
