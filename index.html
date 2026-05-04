@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Twilight Pixel Gallery</title>
+<title>Cloud Pixel Gallery</title>
 <style>
     /* 全体のレイアウト */
     body, html {
@@ -16,24 +16,22 @@
         font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
     }
 
-    /* 1. 動く背景層（切れ目対策版） */
-    .scrolling-bg {
+    /* 1. 固定された背景層（提供された画像） */
+    .fixed-bg {
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
-        background-image: url('cloud.png');
-        background-size: cover;
-        background-position: center;
-        /* 横に2倍のサイズでリピートさせ、端を馴染ませる */
-        background-repeat: repeat-x;
-        animation: scrollBackground 160s linear infinite;
+        /* 提供された画像のURLを指定（必ずリポジトリにあるファイル名と合わせてください） */
+        background-image: url('cloud.png'); /* あなたのリポジトリにある画像ファイル名 */
+        /* ★ここを修正しました★ */
+        /* アスペクト比を無視して、画面全体（ビューポート）に無理やり引き伸ばす */
+        background-size: 100vw 100vh; 
+        /* 画像を中央に配置 */
+        background-position: center; 
+        /* 画像を繰り返さない */
+        background-repeat: no-repeat; 
         z-index: 1;
         /* 少し画像を粗くしてドット感を出す */
         image-rendering: pixelated;
-    }
-
-    @keyframes scrollBackground {
-        from { background-position: 0 center; }
-        to { background-position: -4000px center; }
     }
 
     /* 2. ドット質感層（ピクセルフィルター） */
@@ -41,20 +39,20 @@
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
         z-index: 2;
-        /* 3x3ピクセルの格子状ドット */
-        background-image: radial-gradient(rgba(0,0,0,0.3) 1px, transparent 0);
+        /* 3x3ピクセルの格子状ドット（rgbaの値を変更して調整可能） */
+        background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 0);
         background-size: 3px 3px;
         pointer-events: none; /* 下のボタンをクリックできるようにする */
     }
 
-    /* 3. すりガラス層 */
+    /* 3. すりガラス層（夕暮れ感） */
     .glass-overlay {
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
         z-index: 3;
-        /* ぼかしを少し強めに（20px） */
-        backdrop-filter: blur(4px);
-        -webkit-backdrop-filter: blur(4px);
+        /* ぼかし（20px） */
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         /* 夕暮れ時のオレンジ〜紫のグラデーション */
         background: linear-gradient(
             135deg, 
@@ -98,7 +96,7 @@
 </head>
 <body>
 
-    <div class="scrolling-bg"></div>
+    <div class="fixed-bg"></div>
     <div class="pixel-layer"></div>
     <div class="glass-overlay"></div>
 
