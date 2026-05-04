@@ -16,22 +16,40 @@
         font-family: 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
     }
 
-    /* 1. 固定された背景層（提供された画像） */
-    .fixed-bg {
+    /* 1. スクロールする背景層（元の .fixed-bg を置き換え） */
+    .scroll-container {
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
-        /* 提供された画像のURLを指定（必ずリポジトリにあるファイル名と合わせてください） */
-        background-image: url('cloud.png'); /* あなたのリポジトリにある画像ファイル名 */
-        /* ★ここを修正しました★ */
-        /* アスペクト比を無視して、画面全体（ビューポート）に無理やり引き伸ばす */
-        background-size: 100vw 100vh; 
-        /* 画像を中央に配置 */
-        background-position: center; 
-        /* 画像を繰り返さない */
-        background-repeat: no-repeat; 
         z-index: 1;
-        /* 少し画像を粗くしてドット感を出す */
+    }
+
+    .scroll-track {
+        display: flex;
+        /* 画像4枚分の幅を持たせる */
+        width: calc(100vw * 4); 
+        /* 40秒かけて一定の速度で無限ループ（速度はここで調整可能） */
+        animation: scroll-left 40s linear infinite;
+    }
+
+    .scroll-img {
+        width: 100vw;
+        height: 100vh;
+        /* アスペクト比を無視して画面全体に無理やり引き伸ばす（元の background-size: 100vw 100vh; と同じ効果） */
+        object-fit: fill; 
+        /* 画像を少し粗くしてドット感を出す */
         image-rendering: pixelated;
+    }
+
+    /* 2枚目と4枚目の画像を左右反転させて切れ目をなくす */
+    .mirrored {
+        transform: scaleX(-1);
+    }
+
+    /* スクロールアニメーションの定義 */
+    @keyframes scroll-left {
+        0% { transform: translateX(0); }
+        /* 4枚中、2枚分移動したところで0にリセット */
+        100% { transform: translateX(-50%); }
     }
 
     /* 2. ドット質感層（ピクセルフィルター） */
@@ -39,7 +57,7 @@
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
         z-index: 2;
-        /* 3x3ピクセルの格子状ドット（rgbaの値を変更して調整可能） */
+        /* 3x3ピクセルの格子状ドット */
         background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 0);
         background-size: 3px 3px;
         pointer-events: none; /* 下のボタンをクリックできるようにする */
@@ -50,7 +68,7 @@
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
         z-index: 3;
-        /* ぼかし（20px） */
+        /* ぼかし（4px） */
         backdrop-filter: blur(4px);
         -webkit-backdrop-filter: blur(4px);
         /* 夕暮れ時のオレンジ〜紫のグラデーション */
@@ -59,6 +77,7 @@
             rgba(255, 120, 50, 0.2), 
             rgba(80, 20, 100, 0.3)
         );
+        pointer-events: none; /* ★追加：この層もクリックの邪魔にならないようにする */
     }
 
     /* 4. コンテンツ層（ボタン） */
@@ -96,10 +115,21 @@
 </head>
 <body>
 
-    <div class="fixed-bg"></div>
+    <!-- 1. スクロールする背景（元の .fixed-bg に該当） -->
+    <div class="scroll-container">
+        <div class="scroll-track">
+            <img class="scroll-img" src="cloud.png" alt="背景">
+            <img class="scroll-img mirrored" src="cloud.png" alt="背景">
+            <img class="scroll-img" src="cloud.png" alt="背景">
+            <img class="scroll-img mirrored" src="cloud.png" alt="背景">
+        </div>
+    </div>
+
+    <!-- 2. エフェクト層 -->
     <div class="pixel-layer"></div>
     <div class="glass-overlay"></div>
 
+    <!-- 3. コンテンツ層 -->
     <div class="container">
         <a href="gallery.html" class="gallery-btn">Enter Gallery</a>
     </div>
