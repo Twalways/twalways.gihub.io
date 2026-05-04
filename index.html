@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>イラストギャラリー</title>
+<style>
+    /* ページ全体の設定 */
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden; /* スクロールバーを隠す */
+        font-family: 'Helvetica Neue', Arial, sans-serif;
+        background-color: #ff9a9e; /* 画像読み込み前の夕暮れベース色 */
+    }
+
+    /* 横スクロールする背景（草原と夕暮れのイメージ） */
+    .scrolling-bg {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        /* ここに好きな森や草原の画像のURLを入れます（仮の夕暮れ画像を入れています） */
+        background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2000&auto=format&fit=crop');
+        background-size: cover;
+        background-repeat: repeat-x;
+        /* 120秒かけてゆっくり左へ動くアニメーション */
+        animation: scrollBackground 120s linear infinite;
+        z-index: 1;
+    }
+
+    /* 背景を動かすキーフレーム */
+    @keyframes scrollBackground {
+        0% { background-position: 0 center; }
+        100% { background-position: -2000px center; }
+    }
+
+    /* すりガラス（フロストガラス）のオーバーレイ */
+    .glass-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        z-index: 2;
+        /* ぼかし効果（ここを大きくするとより曇ります） */
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        /* 夕暮れ感を強調するための、ほんのりオレンジの半透明レイヤー */
+        background: rgba(255, 120, 50, 0.15);
+    }
+
+    /* 真ん中のコンテンツ配置用 */
+    .content {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* メインのボタンのデザイン */
+    .gallery-btn {
+        padding: 16px 48px;
+        font-size: 1.2rem;
+        color: #ffffff;
+        text-decoration: none;
+        font-weight: bold;
+        letter-spacing: 2px;
+        /* ボタン自体にも少しすりガラス感を入れる */
+        background: rgba(255, 255, 255, 0.2);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        border-radius: 50px;
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    /* ボタンにカーソルを合わせた時のフワッとした動き */
+    .gallery-btn:hover {
+        background: rgba(255, 255, 255, 0.5);
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(255, 255, 255, 0.4);
+    }
+</style>
+</head>
+<body>
+
+    <!-- 背景 -->
+    <div class="scrolling-bg"></div>
+
+    <!-- すりガラス効果 -->
+    <div class="glass-overlay"></div>
+
+    <!-- ボタン -->
+    <div class="content">
+        <!-- 飛び先のファイル名を href の中に入れます -->
+        <a href="gallery.html" class="gallery-btn">イラストを見る</a>
+    </div>
+
+</body>
+</html>
