@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cloud Pixel Gallery</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
     /* 全体のレイアウト */
     body, html {
@@ -111,10 +112,61 @@
         letter-spacing: 6px;
         transform: scale(1.05);
     }
+
+    /* SNSアイコンの配置 */
+    .sns-links {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        z-index: 10; /* すりガラスより上に表示 */
+        display: flex;
+        gap: 15px;
+    }
+
+    .sns-icon {
+        width: 45px;
+        height: 45px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        text-decoration: none;
+        font-size: 1.2rem;
+        transition: all 0.3s ease;
+    }
+
+    .sns-icon:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 各ブランドカラー（ホバー時に少し色を付けるとお洒落です） */
+    .sns-icon.twitch:hover { color: #9146ff; }
+    .sns-icon.twitter:hover { color: #1da1f2; }
+    .sns-icon.email:hover { color: #ffb13b; }
+    
 </style>
 </head>
 <body>
 
+    <div class="sns-links">
+        <a href="https://www.twitch.tv/tw_always" target="_blank" class="sns-icon twitch">
+            <i class="fab fa-twitch"></i>
+        </a>
+        <a href="https://x.com/TW_always" target="_blank" class="sns-icon twitter">
+            <i class="fab fa-x-twitter"></i>
+        </a>
+        <a href="mailto:towa1426@gmail.com" class="sns-icon email">
+            <i class="fas fa-envelope"></i>
+        </a>
+    </div>
+    
     <!-- 1. スクロールする背景（元の .fixed-bg に該当） -->
     <div class="scroll-container">
         <div class="scroll-track">
